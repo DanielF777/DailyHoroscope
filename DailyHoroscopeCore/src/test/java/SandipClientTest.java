@@ -1,9 +1,20 @@
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.RoleInfo;
+import org.eclipse.jetty.security.SecurityHandler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.UserIdentity;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import javax.servlet.Servlet;
+import java.io.IOException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,16 +28,11 @@ import static org.mockito.Mockito.when;
 
 public class SandipClientTest {
 
-    @Mock
-    private JsonParser jsonParser;
-
     private SandipClient classUnderTest;
 
     @Before
     public void setUp() throws Exception {
-        jsonParser = mock(JsonParser.class);
-        when(jsonParser.parseToHoroscope(primedJSONResponse())).thenReturn(horoscopeFromHardcodedResponse());
-        classUnderTest = new SandipClient(new URI("http://localhost:7070"), jsonParser);
+        classUnderTest = new SandipClient(new URI("http://localhost:7070"));
     }
 
     @Test
@@ -34,26 +40,29 @@ public class SandipClientTest {
 
         startServer();
 
-        Horoscope expected = new HoroscopeBuilder()
-                .withHoroscope(getHoroscopeText())
-                .withDate(new Date(2018, 3, 9))
-                .withMetaData(getMetadata())
-                .withStarsign(getHardCodedStarsign())
-                .build();
+        String expected = primedJSONResponse();
 
-        Horoscope actual = classUnderTest.horoscopeFor(getHardCodedStarsign());
+        String actual = classUnderTest.horoscopePayloadFor(getHardCodedStarsign());
 
-        assertThat(expected.getStarsign(), equalTo(actual.getStarsign()));
-        assertThat(expected.getDate(), equalTo(actual.getDate()));
-        assertThat(expected.getHoroscope(), equalTo(actual.getHoroscope()));
-        assertThat(expected.getMetaData(), equalTo(actual.getMetaData()));
+        assertThat(expected, equalTo(actual));
 
     }
 
     private void startServer() throws Exception {
+
+        SessionHandler sessionHandler = new SessionHandler();
+        ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
+        ServletHandler servletHandler = new ServletHandler();
+
         Server server = new Server(7070);
 
-        ServletContextHandler handler = new ServletContextHandler(server, "/Gemini/Today");
+        ServletContextHandler handler = new ServletContextHandler(
+                server,
+                sessionHandler,
+                securityHandler,
+                servletHandler,
+                null
+        );
 
         handler.addServlet(MyServlet.class, "/");
 
@@ -63,26 +72,22 @@ public class SandipClientTest {
 
     private String primedJSONResponse() {
         return "{\n" +
-                "  \"sunsign\": \"Gemini\",\n" +
-                "  \"credit\": \"(c) Kelli Fox, The Astrologer, http://new.theastrologer.com\",\n" +
-                "  \"date\": \"2018-03-09\",\n" +
-                "  \"horoscope\": \"The world is your oyster today. So what are you waiting for? Get out there and find your adventure. It's a perfect day for learning something new. This can be formalized through taking a class, or it can be an informal, impromptu process. That's what 'the world is your oyster' means -- your pearl of knowledge is out there, just waiting to be discovered. So where will you search for it first?(c) Kelli Fox, The Astrologer, http://new.theastrologer.com\",\n" +
-                "  \"meta\": {\n" +
-                "    \"mood\": \"strange\",\n" +
+                " \"sunsign\": \"Gemini\",\n" +
+                " \"credit\": \"(c) Kelli Fox, The Astrologer, http://new.theastrologer.com\",\n" +
+                " \"date\" : \"2018-03-09\",\n" +
+                " \"horoscope\" : \"The world is your oyster today. So what are you waiting for? \n" +
+                " Get out there and find your adventure. It's a perfect day for learning \n" +
+                " something new. This can be formalized through taking a class, or it can be \n" +
+                " an informal, impromptu process. That's what 'the world is your oyster' means \n" +
+                " -- your pearl of knowledge is out there, just waiting to be discovered. So \n" +
+                " where will you search for it first?\n" +
+                " (c) Kelli Fox, The Astrologer, http://new.theastrologer.com\",\n" +
+                " \"meta\" { \n" +
+                "    \"mood\" : \"strange\",\n" +
                 "    \"keywords\": \"one-sided, fervor\",\n" +
-                "    \"intensity\": \"87%\"\n" +
-                "  }\n" +
-                "}";
-    }
-
-    private Horoscope horoscopeFromHardcodedResponse() {
-        return new Horoscope(
-                getHardCodedStarsign(),
-                "(c) Kelli Fox, The Astrologer, http://new.theastrologer.com",
-                getDate(),
-                getHoroscopeText(),
-                getMetadata()
-        );
+                "    \"intensity\": \"87%\" \n" +
+                "  } \n" +
+                "}\n";
     }
 
     private String getHardCodedStarsign() {
