@@ -10,12 +10,15 @@ public class JsonParser {
         this.objectMapper = objectMapper;
     }
 
-    public Horoscope parseToHoroscope(String jsonString) {
+    public Horoscopes allHoroscopesFromJson(String payload) {
         try {
-            return objectMapper.readValue(jsonString, Horoscope.class);
+            return objectMapper.readValue(payload, Horoscopes.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
+
 }

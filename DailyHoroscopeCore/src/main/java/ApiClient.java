@@ -1,7 +1,6 @@
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -10,29 +9,31 @@ import java.net.URI;
 
 import static java.nio.charset.Charset.defaultCharset;
 
-public class SandipClient {
+public class ApiClient {
 
     private URI uri;
-    private CloseableHttpClient httpClient;
 
-    public SandipClient(URI uri) {
+    public ApiClient(URI uri) {
         this.uri = uri;
-        this.httpClient = HttpClientBuilder.create().build();
     }
 
-    public String horoscopePayloadFor(String horoscope) {
+    public String horoscopePayload() {
 
         String payload = "";
-        String endpoint = uri.toString() + "/" + horoscope + "/today";
+
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+        HttpGet request = new HttpGet(uri.toString());
 
         try {
-            HttpResponse response = httpClient.execute(new HttpGet(endpoint));
+            HttpResponse response = httpClient.execute(request);
             payload = IOUtils.toString(response.getEntity().getContent(), defaultCharset());
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return payload;
+
     }
+
 }
