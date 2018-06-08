@@ -8,7 +8,8 @@ public class Horoscopes {
 
     private List<Horoscope> horoscopes;
 
-    public Horoscopes(@JsonProperty("dailyhoroscope") Horoscope[] horoscopes) {
+    public Horoscopes(@JsonProperty("dailyhoroscope") Horoscope[] horoscopes,
+                      @JsonProperty("dates") Dates[] dates) {
         this.horoscopes = Arrays.asList(horoscopes);
     }
 

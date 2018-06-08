@@ -19,12 +19,13 @@ public class JsonParserTest extends JsonTestBase {
         objectMapper = Mockito.mock(ObjectMapper.class);
 
         classUnderTest = new JsonParser(objectMapper);
+
     }
 
     @Test
     public void canParseFromJsonToHoroscope() throws Exception {
 
-        Horoscopes expected = new Horoscopes(somePrimedHoroscopes());
+        Horoscopes expected = new Horoscopes(somePrimedHoroscopes(), new Dates[5]);
 
         Mockito.when(objectMapper.readValue(primedJsonText(), Horoscopes.class)).thenReturn(expected);
 

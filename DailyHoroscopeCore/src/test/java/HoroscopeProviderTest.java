@@ -27,7 +27,8 @@ public class HoroscopeProviderTest extends JsonTestBase {
         apiClient = Mockito.mock(ApiClient.class);
         jsonParser = Mockito.mock(JsonParser.class);
         classUnderTest = new HoroscopeProvider(jsonParser, apiClient);
-        horoscopes = new Horoscopes(allHoroscopes());
+
+        horoscopes = new Horoscopes(allHoroscopes(), new Dates[5]);
 
         Mockito.when(apiClient.horoscopePayload()).thenReturn(primedJsonText());
         Mockito.when(jsonParser.allHoroscopesFromJson(primedJsonText())).thenReturn(horoscopes);
