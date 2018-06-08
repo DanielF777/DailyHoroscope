@@ -11,7 +11,7 @@ import java.net.URI;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ApiClientTest extends JsonTestBase {
+public class ApiClientTest {
 
     private ApiClient classUnderTest;
 
@@ -22,24 +22,19 @@ public class ApiClientTest extends JsonTestBase {
 
     @Test
     public void canGetDataFromEndpoint() throws Exception {
-
         startServer();
 
-        String expected = primedJsonText();
         String actual = classUnderTest.horoscopePayload();
 
-        assertThat(expected, equalTo(actual));
-
+        String expected = TestUtils.horoscopesApiPayload();
+        assertThat(actual, equalTo(expected));
     }
 
     private void startServer() throws Exception {
-
         SessionHandler sessionHandler = new SessionHandler();
         ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
         ServletHandler servletHandler = new ServletHandler();
-
         Server server = new Server(7070);
-
         ServletContextHandler handler = new ServletContextHandler(
                 server,
                 sessionHandler,
@@ -49,8 +44,7 @@ public class ApiClientTest extends JsonTestBase {
         );
 
         handler.addServlet(MyServlet.class, "/");
-
         server.start();
-
     }
+
 }

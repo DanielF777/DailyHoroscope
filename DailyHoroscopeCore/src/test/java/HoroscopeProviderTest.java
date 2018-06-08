@@ -5,7 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
-public class HoroscopeProviderTest extends JsonTestBase {
+public class HoroscopeProviderTest {
 
     private ApiClient apiClient = mock(ApiClient.class);
     private JsonParser jsonParser = mock(JsonParser.class);
@@ -15,12 +15,12 @@ public class HoroscopeProviderTest extends JsonTestBase {
 
     @Before
     public void setUp() throws Exception {
-        when(apiClient.horoscopePayload()).thenReturn(horoscopesApiPayload());
+        when(apiClient.horoscopePayload()).thenReturn(TestUtils.horoscopesApiPayload());
     }
 
     @Test
     public void verifyGetHoroscopeIsInvoked() throws Exception {
-        when(jsonParser.allHoroscopesFromJson(horoscopesApiPayload())).thenReturn(horoscopes);
+        when(jsonParser.allHoroscopesFromJson(TestUtils.horoscopesApiPayload())).thenReturn(horoscopes);
 
         classUnderTest.horoscopeFor("starSign");
 
@@ -30,7 +30,7 @@ public class HoroscopeProviderTest extends JsonTestBase {
     @Test
     public void checkValidHoroscopeIsReturned() {
         String givenStarsign = "Gemini";
-        when(jsonParser.allHoroscopesFromJson(horoscopesApiPayload())).thenReturn(new Horoscopes(dailyhoroscope(), dates()));
+        when(jsonParser.allHoroscopesFromJson(TestUtils.horoscopesApiPayload())).thenReturn(new Horoscopes(TestUtils.dailyhoroscope(), TestUtils.dates()));
 
         String actualHoroscope = classUnderTest.horoscopeFor(givenStarsign);
 
@@ -40,7 +40,7 @@ public class HoroscopeProviderTest extends JsonTestBase {
     @Test
     public void checkValidHoroscopeIsReturnedWhenUsingMixedCase() {
         String givenStarsign = "GeMiNi";
-        when(jsonParser.allHoroscopesFromJson(horoscopesApiPayload())).thenReturn(new Horoscopes(dailyhoroscope(), dates()));
+        when(jsonParser.allHoroscopesFromJson(TestUtils.horoscopesApiPayload())).thenReturn(new Horoscopes(TestUtils.dailyhoroscope(), TestUtils.dates()));
 
         String actualHoroscope = classUnderTest.horoscopeFor(givenStarsign);
 
