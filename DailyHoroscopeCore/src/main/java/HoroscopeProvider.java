@@ -8,7 +8,7 @@ public class HoroscopeProvider {
         this.apiClient = apiClient;
     }
 
-    public Horoscope horoscopeFor(String starsign) {
+    public String horoscopeFor(String starsign) {
         String payload = apiClient.horoscopePayload();
         Horoscopes horoscopes = jsonParser.allHoroscopesFromJson(payload);
 

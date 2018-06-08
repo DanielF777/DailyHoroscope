@@ -9,7 +9,7 @@ public class Runner {
 
         ApiClient apiClient = new ApiClient(new URI("https://www.horoscopes-and-astrology.com/json"));
 
-        JsonParser jsonParser = new JsonParser(new ObjectMapper());
+        JsonParser jsonParser = new JsonParser();
 
         HoroscopeProvider horoscopeProvider = new HoroscopeProvider(jsonParser, apiClient);
 

@@ -28,7 +28,7 @@ public class HoroscopeProviderTest extends JsonTestBase {
         jsonParser = Mockito.mock(JsonParser.class);
         classUnderTest = new HoroscopeProvider(jsonParser, apiClient);
 
-        horoscopes = new Horoscopes(allHoroscopes(), new Dates[5]);
+// TODO revisit test       horoscopes = new Horoscopes(allHoroscopes(), new Dates[5]);
 
         Mockito.when(apiClient.horoscopePayload()).thenReturn(primedJsonText());
         Mockito.when(jsonParser.allHoroscopesFromJson(primedJsonText())).thenReturn(horoscopes);
@@ -39,10 +39,9 @@ public class HoroscopeProviderTest extends JsonTestBase {
         Horoscope expected = someHoroscope();
         String starsign = expected.getStarsign();
 
-        Horoscope actual = classUnderTest.horoscopeFor(starsign);
+        String actual = classUnderTest.horoscopeFor(starsign);
 
-        assertThat(actual.getStarsign(), is(expected.getStarsign()));
-        assertThat(actual.getHoroscope(), is(expected.getHoroscope()));
+        assertThat(actual, is(expected.getHoroscope()));
     }
 
     private Horoscope someHoroscope() {

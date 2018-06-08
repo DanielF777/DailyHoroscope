@@ -1,40 +1,24 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class JsonParserTest extends JsonTestBase {
 
-    private JsonParser classUnderTest;
-
-    @Mock
-    private ObjectMapper objectMapper;
-
-    @Before
-    public void setUp() throws Exception {
-        objectMapper = Mockito.mock(ObjectMapper.class);
-
-        classUnderTest = new JsonParser(objectMapper);
-
-    }
+    private final JsonParser jsonParser = new JsonParser();
 
     @Test
-    public void canParseFromJsonToHoroscope() throws Exception {
+    public void canDeserializeToHoroscope() {
+        String givenPayload = horoscopesApiPayload();
 
-        Horoscopes expected = new Horoscopes(somePrimedHoroscopes(), new Dates[5]);
+        Horoscopes actualHoroscopes = jsonParser.allHoroscopesFromJson(givenPayload);
 
-        Mockito.when(objectMapper.readValue(primedJsonText(), Horoscopes.class)).thenReturn(expected);
-
-        Horoscopes actual = classUnderTest.allHoroscopesFromJson(primedJsonText());
-
-        Mockito.verify(objectMapper).readValue(primedJsonText(), Horoscopes.class);
-
-        assertThat(expected, equalTo(actual));
-
+        Horoscopes expectedHoroscopes = new Horoscopes(dailyhoroscope(), dates());
+        assertThat(actualHoroscopes.getDailyhoroscope(), equalTo(expectedHoroscopes.getDailyhoroscope()));
+        assertThat(actualHoroscopes.getDates(), equalTo(expectedHoroscopes.getDates()));
     }
 
     private Horoscope[] somePrimedHoroscopes() {

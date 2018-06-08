@@ -1,25 +1,33 @@
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class Horoscopes {
 
-    private List<Horoscope> horoscopes;
+    private Map<String, String> dailyhoroscope;
+    private Map<String, String> dates;
 
-    public Horoscopes(@JsonProperty("dailyhoroscope") Horoscope[] horoscopes,
-                      @JsonProperty("dates") Dates[] dates) {
-        this.horoscopes = Arrays.asList(horoscopes);
+    public Horoscopes(@JsonProperty("dailyhoroscope") Map dailyhoroscope,
+                      @JsonProperty("dates") Map dates) {
+        this.dailyhoroscope = dailyhoroscope;
+        this.dates = dates;
     }
 
-    public Horoscope getHoroscope(String horoscopeName) {
-        return horoscopes
-                .stream()
-                .filter(horoscope -> horoscopeName.equals(horoscope.getStarsign()))
-                .collect(Collectors.toList())
-                .get(0);
+    public String getHoroscope(String horoscopeName) {
+//        return horoscopes
+//                .stream()
+//                .filter(horoscope -> horoscopeName.equals(horoscope.getStarsign()))
+//                .collect(Collectors.toList())
+//                .get(0);
+        return dailyhoroscope.get(horoscopeName);
     }
 
 
+    public Map getDailyhoroscope() {
+        return dailyhoroscope;
+    }
+
+    public Map getDates() {
+        return dates;
+    }
 }
