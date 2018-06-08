@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.StringUtils;
+
 public class HoroscopeProvider {
 
     private JsonParser jsonParser;
@@ -12,7 +14,9 @@ public class HoroscopeProvider {
         String payload = apiClient.horoscopePayload();
         Horoscopes horoscopes = jsonParser.allHoroscopesFromJson(payload);
 
-        return horoscopes.getHoroscope(starsign);
+        String capitalizedStarsign = StringUtils.capitalize(starsign.toLowerCase());
+        String horoscopeAnswer = horoscopes.getHoroscope(capitalizedStarsign);
+        return StringUtils.replacePattern(horoscopeAnswer, "<a.*", "");
     }
 
 }

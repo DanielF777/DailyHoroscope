@@ -7,8 +7,8 @@ public class Horoscopes {
     private Map<String, String> dailyhoroscope;
     private Map<String, String> dates;
 
-    public Horoscopes(@JsonProperty("dailyhoroscope") Map dailyhoroscope,
-                      @JsonProperty("dates") Map dates) {
+    public Horoscopes(@JsonProperty("dailyhoroscope") Map<String, String> dailyhoroscope,
+                      @JsonProperty("dates") Map<String, String> dates) {
         this.dailyhoroscope = dailyhoroscope;
         this.dates = dates;
     }
