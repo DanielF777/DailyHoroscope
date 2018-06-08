@@ -14,14 +14,8 @@ public class Horoscopes {
     }
 
     public String getHoroscope(String horoscopeName) {
-//        return horoscopes
-//                .stream()
-//                .filter(horoscope -> horoscopeName.equals(horoscope.getStarsign()))
-//                .collect(Collectors.toList())
-//                .get(0);
         return dailyhoroscope.get(horoscopeName);
     }
-
 
     public Map getDailyhoroscope() {
         return dailyhoroscope;

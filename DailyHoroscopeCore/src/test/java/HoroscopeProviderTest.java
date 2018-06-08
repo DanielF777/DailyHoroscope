@@ -9,42 +9,28 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class HoroscopeProviderTest extends JsonTestBase {
 
-//    TODO revisit test
+    private ApiClient apiClient= mock(ApiClient.class);
+    private JsonParser jsonParser = mock(JsonParser.class);
+    private Horoscopes horoscopes = mock(Horoscopes.class);
 
-    @Mock
-    private ApiClient apiClient;
-
-    @Mock
-    private JsonParser jsonParser;
-
-    private HoroscopeProvider classUnderTest;
-
-    private Horoscopes horoscopes;
+    private HoroscopeProvider classUnderTest = new HoroscopeProvider(jsonParser, apiClient);
 
     @Before
     public void setUp() throws Exception {
-        apiClient = Mockito.mock(ApiClient.class);
-        jsonParser = Mockito.mock(JsonParser.class);
-        classUnderTest = new HoroscopeProvider(jsonParser, apiClient);
-
-//       horoscopes = new Horoscopes(allHoroscopes(), new Dates[5]);
-
-        Mockito.when(apiClient.horoscopePayload()).thenReturn(primedJsonText());
-        Mockito.when(jsonParser.allHoroscopesFromJson(primedJsonText())).thenReturn(horoscopes);
+        when(apiClient.horoscopePayload()).thenReturn(horoscopesApiPayload());
+        when(jsonParser.allHoroscopesFromJson(horoscopesApiPayload())).thenReturn(horoscopes);
     }
 
     @Test
     public void returnsAValidHoroscope() throws Exception {
-//        Horoscope expected = someHoroscope();
-//        String starsign = expected.getStarsign();
+        String givenStarsign = "starsign";
 
-//        String actual = classUnderTest.horoscopeFor(starsign);
+        String actual = classUnderTest.horoscopeFor(givenStarsign);
 
-//        assertThat(actual, is(expected.getHoroscope()));
+        verify(horoscopes, times(1)).getHoroscope(givenStarsign);
     }
-
-
 }
