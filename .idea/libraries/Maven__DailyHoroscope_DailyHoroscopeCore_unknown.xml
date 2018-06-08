@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: DailyHoroscope:DailyHoroscopeCore:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/DailyHoroscope/DailyHoroscopeCore/unknown/DailyHoroscopeCore-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/DailyHoroscope/DailyHoroscopeCore/unknown/DailyHoroscopeCore-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/DailyHoroscope/DailyHoroscopeCore/unknown/DailyHoroscopeCore-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
